@@ -15,8 +15,20 @@ class User(db.Model):
     created_at = db.Column(db.String(), default=func.now())
     completed_courses = db.relationship('CoursesCompleted', backref=db.backref('users', lazy='dynamic'))
 
+    def create(self):
+        pass
+
+    def delete(self):
+        pass
+
+    def is_active(self):
+        pass
+
+    def what_role(self):
+        pass
+
     def __repr__(self):
-        return f'{self.id} {self.email} |'
+        return f'{self.id}, {self.email} |'
 
 class Role(db.Model):
     __tablename__ = 'role'
@@ -25,7 +37,7 @@ class Role(db.Model):
     description = db.Column(db.String(255), nullable = False)
 
     def __repr__(self):
-        return f'{self.id} {self.role} |'
+        return f'{self.id}, {self.role} |'
 
 class Courses(db.Model):
     __tablename__ = 'courses'
