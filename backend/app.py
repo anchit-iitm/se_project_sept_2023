@@ -39,26 +39,31 @@ dictConfig(
 app = None
 api = None
 jwt = None
-celery = None
+
+def create_app():
+    app = Flask(__name__, template_folder='templates')
+    app.config.from_object(LocalDev)
+
+    db.init_app(app)
+    app.app_context().push()
+    app.logger.info('Database plugin initialized')
+
+    api = Api(app)
+    app.app_context().push()
+    app.logger.info('API plugin initialized')
+
+    jwt = JWTManager(app)
+    app.app_context().push()
+    app.logger.info('JWT Manager initialized')
+
+    app.logger.info('App setup complete.')
+
+    return app, api, jwt
 
 
-app = Flask(__name__, template_folder='templates')
-app.config.from_object(LocalDev)
+app, api, jwt = create_app()
 
-db.init_app(app)
-app.app_context().push()
-app.logger.info('Database plugin initialized')
-
-api = Api(app)
-app.app_context().push()
-app.logger.info('API plugin initialized')
-
-jwt = JWTManager(app)
-app.app_context().push()
-app.logger.info('JWT Manager initialized')
-
-app.logger.info('App setup complete.')
-
+import api.auth
 
 @app.route('/')
 def home():
